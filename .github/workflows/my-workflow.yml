@@ -1,10 +1,10 @@
-on: [push, pull_request]
-  
+name: JS Actions
+
+on: [push]
+
 jobs:
-  print-username:
+  action:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Print the input name to STDOUT
-        run: echo The username is ${{ inputs.username }}
-
+      - uses: actions/checkout@v1
