@@ -1,27 +1,28 @@
 const core = require("@actions/core");
 const github = require('@actions/github');
 
+// Workflow:
+// Get current commit
+// Find PR that contains current commit in recent commits
+// Get target branch of PR
+// If current commit can merge easily with target branch, skip workflow
+// Otherwise, continue
+
 const main = async () => {
-	const firstGreeting = core.getInput("first-greeting");
-	const secondGreeting = core.getInput("second-greeting");
-	const thirdGreeting = core.getInput("third-greeting");
-
-	console.log(`Hello ${firstGreeting}`);
-	console.log(`Hello ${secondGreeting}`);
-	if (thirdGreeting) {
-		console.log(`Hello ${thirdGreeting}`);
-	}
-
 	const myToken = core.getInput('GITHUB_TOKEN');
 
     const octokit = github.getOctokit(myToken)
 
+	const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
+
 	const { data } = await octokit.rest.pulls.list({
-		owner: "utwente-fmt",
-		repo: "vercors",
+		owner, repo
 	});
 
 	console.log(data);
+	for (const pr of data) {
+		
+	}
 };
 
 main();
