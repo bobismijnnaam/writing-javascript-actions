@@ -18,5 +18,5 @@ inputs:
     required: false
 
 runs:
-  using: "node14"
+  using: "node16"
   main: "main.js"
