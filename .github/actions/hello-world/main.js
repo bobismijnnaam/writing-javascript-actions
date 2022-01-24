@@ -14,6 +14,7 @@ const main = async () => {
     const octokit = github.getOctokit(myToken)
 
 	const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
+	console.log(process.env.GITHUB_HEAD_REF);
 
 	const { data } = await octokit.rest.pulls.list({
 		owner, repo
