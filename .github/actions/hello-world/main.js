@@ -15,14 +15,16 @@ const main = async () => {
 
 	const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 
-
 	const { data } = await octokit.rest.pulls.list({
 		owner, repo
 	});
 
 	console.log(data);
 	for (const pr of data) {
-		
+		const { data } = await octokit.rest.pulls.get({
+			owner, repo, number: pr.number
+		});
+		console.log(data);
 	}
 };
 
