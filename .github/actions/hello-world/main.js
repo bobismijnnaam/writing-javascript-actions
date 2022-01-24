@@ -15,6 +15,7 @@ const main = async () => {
 
 	const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 
+
 	const { data } = await octokit.rest.pulls.list({
 		owner, repo
 	});
