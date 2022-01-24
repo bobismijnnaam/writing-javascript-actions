@@ -15,7 +15,7 @@ const main = async () => {
 	const octokit = new Octokit();
 
 	const pulls = await octokit.rest.pulls.list({
-		owner: "utwente_fmt",
+		owner: "utwente-fmt",
 		repo: "vercors",
 	});
 
