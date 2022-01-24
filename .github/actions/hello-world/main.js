@@ -1,4 +1,5 @@
 const core = require("@actions/core");
+const { Octokit } = require("@octokit/action");
 
 const firstGreeting = core.getInput("first-greeting");
 const secondGreeting = core.getInput("second-greeting");
@@ -9,3 +10,10 @@ console.log(`Hello ${secondGreeting}`);
 if (thirdGreeting) {
     console.log(`Hello ${thirdGreeting}`);
 }
+
+const octokit = new Octokit();
+
+console.log(octokit.rest.pulls.list({
+	  utwente_fmt,
+	  "vercors",
+}));
