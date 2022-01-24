@@ -4,9 +4,11 @@ const github = require('@actions/github');
 // Workflow:
 // Get current commit
 // Find PR that has as base branch the current branch
-// Get target branch of PR
-// If current commit can merge easily with target branch, skip workflow
-// Otherwise, continue
+// If mergable, exit
+// If not, continue
+// If unknown, wait 10 seconds, and try again every second
+//
+// When multiple commits are pushed, only the latest gets executed in an action. Additionally, it is assumed in this action we are not dealing with technically annoying behaviour, i.e., pushing single branches rapidly. Therefore it is safe to assume that we can wait 10 sec to check if the current branch is mergable. In the worst case, 10 seconds is wasted waiting
 
 const main = async () => {
 	const myToken = core.getInput('GITHUB_TOKEN');
