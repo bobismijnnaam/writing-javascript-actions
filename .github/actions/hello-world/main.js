@@ -14,6 +14,6 @@ if (thirdGreeting) {
 const octokit = new Octokit();
 
 console.log(octokit.rest.pulls.list({
-	owner: utwente_fmt,
+	owner: "utwente_fmt",
 	repo: "vercors",
 }));
