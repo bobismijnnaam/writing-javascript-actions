@@ -13,7 +13,9 @@ if (thirdGreeting) {
 
 const octokit = new Octokit();
 
-console.log(octokit.rest.pulls.list({
+const pulls = await octokit.rest.pulls.list({
 	owner: "utwente_fmt",
 	repo: "vercors",
-}));
+});
+
+console.log(pulls);
