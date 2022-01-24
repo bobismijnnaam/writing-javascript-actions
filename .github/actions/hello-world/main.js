@@ -22,7 +22,7 @@ const main = async () => {
 	console.log(data);
 	for (const pr of data) {
 		const { data } = await octokit.rest.pulls.get({
-			owner, repo, number: pr.number
+			owner, repo, pull_number: pr.number
 		});
 		console.log(data);
 	}
