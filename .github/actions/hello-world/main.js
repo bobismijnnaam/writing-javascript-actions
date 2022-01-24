@@ -1,5 +1,5 @@
 const core = require("@actions/core");
-const { Octokit } = require("@octokit/action");
+const github = require('@actions/github');
 
 const main = async () => {
 	const firstGreeting = core.getInput("first-greeting");
@@ -12,14 +12,16 @@ const main = async () => {
 		console.log(`Hello ${thirdGreeting}`);
 	}
 
-	const octokit = new Octokit();
+	const myToken = core.getInput('GITHUB_TOKEN');
 
-	const pulls = await octokit.rest.pulls.list({
+    const octokit = github.getOctokit(myToken)
+
+	const { data } = await octokit.rest.pulls.list({
 		owner: "utwente-fmt",
 		repo: "vercors",
 	});
 
-	console.log(pulls);
+	console.log(data);
 };
 
 main();
