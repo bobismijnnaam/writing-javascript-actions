@@ -84,7 +84,7 @@ Event type: ${eventType}`);
 	const start = hrtime.bigint();
 	do {
 		// If currentCommit is no longer the head of currentBranch: let it run to be safe
-		headOfCurrentBranch = getHeadOf(octokit, owner, repo, currentBranch);
+		headOfCurrentBranch = await getHeadOf(octokit, owner, repo, currentBranch);
 		if (headOfCurrentBranch != currentCommit) {
 			return { action: "continue", reason: `Head of current branch: ${headOfCurrentBranch}\nCurrent commit: ${currentCommit}\nThe commit for which this workflow runs is no longer the head of the branch. Therefore we let it run to be sure, because checking for a merge conflict manually is hard.` };
 		}
