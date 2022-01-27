@@ -44,6 +44,13 @@ async function getHeadOf(octokit, owner, repo, branch) {
 	return sha;
 }
 
+async function getPrsOnBranch(octokit, owner, repo, currentBranch) {
+	const { data } = await octokit.rest.pulls.list({
+		owner, repo, base: currentBranch
+	});
+	return data;
+}
+
 async function logic() {
 	const myToken = core.getInput('GITHUB_TOKEN');
 
@@ -89,15 +96,17 @@ Event type: ${eventType}`);
 			return { action: "continue", reason: `Head of current branch: ${headOfCurrentBranch}\nCurrent commit: ${currentCommit}\nThe commit for which this workflow runs is no longer the head of the branch. Therefore we let it run to be sure, because checking for a merge conflict manually is hard.` };
 		}
 
-		prs = getPrs(octokit, owner, repo, currentBranch);
+		prs = getPrsOnBranch(octokit, owner, repo, currentBranch);
 
 		// If exists pr from currentBranch s.t. !mergable(pr): workflow must run
 		let allTrue = true;
 		for (const pr of prs) {
 			// Check if equals to false, since allowed values are: true, false, null
 			if (pr.mergable == false) {
-				// TODO: Print or return string
-				return;
+				return {
+					action: "continue",
+					reason: `There is at least one PR that is not mergable: "${pr.title}" (#${pr.id}). Therefore, this workflow needs to run.`
+				};
 			}
 			allTrue = allTrue && (pr.mergable == true);
 		}
