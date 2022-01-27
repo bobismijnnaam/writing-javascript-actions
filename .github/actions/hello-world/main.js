@@ -95,6 +95,13 @@ Event type: ${eventType}`);
 
 		prs = await getPrsOnBranch(octokit, owner, repo, currentBranch);
 
+		if (prs.length == 0) {
+			return {
+				action: "continue",
+				reason: "There are currently no open PRs, so this workflow should run."
+			};
+		}
+
 		// If exists pr from currentBranch s.t. !mergable(pr): workflow must run
 		let allTrue = true;
 		for (const pr of prs) {
