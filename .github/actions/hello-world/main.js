@@ -35,6 +35,15 @@ const secondsToNanos = x => x * 1000000000n; // Returns bigint because of "n" at
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
+async function getHeadOf(octokit, owner, repo, branch) {
+	const { type: { sha } } = await octokit.rest.git.getRef({
+		owner,
+		repo,
+		ref: "heads/" + branch,
+	});
+	return sha;
+}
+
 const main = async () => {
 	const myToken = core.getInput('GITHUB_TOKEN');
 
@@ -60,6 +69,8 @@ const main = async () => {
 		// TODO: Return string or print?
 		return;
 	}
+
+	console.log(getHeadOf(octokit, "utwente-fmt", "vercors", "dev"));
 
 	let prs = [];
 	const start = hrtime.bigint();
