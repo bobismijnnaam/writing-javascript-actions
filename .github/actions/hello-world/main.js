@@ -96,7 +96,7 @@ Event type: ${eventType}`);
 			return { action: "continue", reason: `Head of current branch: ${headOfCurrentBranch}\nCurrent commit: ${currentCommit}\nThe commit for which this workflow runs is no longer the head of the branch. Therefore we let it run to be sure, because checking for a merge conflict manually is hard.` };
 		}
 
-		prs = getPrsOnBranch(octokit, owner, repo, currentBranch);
+		prs = await getPrsOnBranch(octokit, owner, repo, currentBranch);
 
 		// If exists pr from currentBranch s.t. !mergable(pr): workflow must run
 		let allTrue = true;
