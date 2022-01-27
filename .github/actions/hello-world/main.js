@@ -51,10 +51,7 @@ async function getPrsOnBranch(octokit, owner, repo, currentBranch) {
 	return data;
 }
 
-async function logic() {
-	const myToken = core.getInput('GITHUB_TOKEN');
-
-    const octokit = github.getOctokit(myToken)
+async function logic(octokit) {
 
 	const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 	const currentBranch = process.env.GITHUB_REF_NAME;
@@ -124,12 +121,22 @@ Event type: ${eventType}`);
 };
 
 async function main() {
-	const { action, reason } = await logic();
+	const myToken = core.getInput('GITHUB_TOKEN');
+    const octokit = github.getOctokit(myToken)
+
+	const { action, reason } = await logic(octokit);
 	if (action == "continue") {
 		console.log(reason);
 	} else if (action == "skip") {
 		console.log(reason);
-		console.log("TODO: Actually skip")
+		const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
+		const workflowRunID = process.env.GITHUB_RUN_ID;
+		console.log(`Skipping workflow #${workflowRunID}`);
+		await octokit.rest.actions.cancelWorkflowRun({
+			owner,
+			repo,
+			run_id: workflowRunID
+		});
 	} else {
 		console.log("Unknown reason: " + reason + ". Letting workflow continue");
 	}
