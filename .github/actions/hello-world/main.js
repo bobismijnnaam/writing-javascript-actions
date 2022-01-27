@@ -72,14 +72,15 @@ async function logic() {
 		return { action: "continue", reason: "Workflow event is not a push event but a " + eventType + ", letting workflow continue"};
 	}
 
-	console.log(await getHeadOf(octokit, "utwente-fmt", "vercors", "dev"));
+	// console.log(await getHeadOf(octokit, "utwente-fmt", "vercors", "dev"));
 
 	let prs = [];
 	const start = hrtime.bigint();
 	do {
 		// If currentCommit is no longer the head of currentBranch: let it run to be safe
-		if (getHeadOf(octokit, owner, repo, currentBranch) != currentCommit) {
-			return { action: "continue", reason: "The commit for which this workflow runs is no longer the head of the branch. Therefore we let it run to be sure, because checking for a merge conflict manually is hard." };
+		headOfCurrentBranch = getHeadOf(octokit, owner, repo, currentBranch);
+		if (headOfCurrentBranch != currentCommit) {
+			return { action: "continue", reason: `Head of current branch: ${headOfCurrentBranch}\nCurrent commit: ${currentCommit}\nThe commit for which this workflow runs is no longer the head of the branch. Therefore we let it run to be sure, because checking for a merge conflict manually is hard.` };
 		}
 
 		prs = getPrs(octokit, owner, repo, currentBranch);
