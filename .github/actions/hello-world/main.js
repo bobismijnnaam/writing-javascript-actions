@@ -70,7 +70,7 @@ const main = async () => {
 		return;
 	}
 
-	console.log(getHeadOf(octokit, "utwente-fmt", "vercors", "dev"));
+	console.log(await getHeadOf(octokit, "utwente-fmt", "vercors", "dev"));
 
 	let prs = [];
 	const start = hrtime.bigint();
