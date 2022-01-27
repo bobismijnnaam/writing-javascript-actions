@@ -45,10 +45,16 @@ async function getHeadOf(octokit, owner, repo, branch) {
 }
 
 async function getPrsOnBranch(octokit, owner, repo, currentBranch) {
-	const r = await octokit.rest.pulls.list({
+	const { data } = await octokit.rest.pulls.list({
 		owner, repo, head: currentBranch
 	});
 	console.log(r);
+	for (const pr of data) {
+
+	}
+		const { data } = await octokit.rest.pulls.get({
+			owner, repo, pull_number: pr.number
+		});
 	return r.data;
 }
 
@@ -130,7 +136,20 @@ The commit for which this workflow runs is no longer the head of the branch. The
 		}
 
 		await delay(1000);
-	} while (existstUnsetMergable(prs) && (hrtime.bigint() - start) < secondsToNanos(10));
+
+		/* We keep looping while one of the PRs "mergable" flag is unset.
+		   Since:
+		   1. If one of them is false, then we return
+		   2. If all of them are true, then we return
+		   3. Finally, if all of them are true, except one or more are unset, then we loop again.
+		   This should cover all cases.
+		*/
+	} while ((hrtime.bigint() - start) < secondsToNanos(10));
+
+	return {
+		action: "continue",
+		reason: "One of the PRs is taking a long time to set the mergable flag. For safety, this workflow is executed anyway."
+	};
 };
 
 async function main() {
