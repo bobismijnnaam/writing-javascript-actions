@@ -132,11 +132,11 @@ async function main() {
 		const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 		const workflowRunID = process.env.GITHUB_RUN_ID;
 		console.log(`Skipping workflow #${workflowRunID}`);
-		await octokit.rest.actions.cancelWorkflowRun({
+		console.log(await octokit.rest.actions.cancelWorkflowRun({
 			owner,
 			repo,
 			run_id: workflowRunID
-		});
+		}));
 	} else {
 		console.log("Unknown reason: " + reason + ". Letting workflow continue");
 	}
