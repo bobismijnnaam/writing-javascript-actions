@@ -13,3 +13,5 @@ jobs:
         with:
           first-greeting: "Learning Lab User"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "important work"
+        run: 'echo "veeeeery important"'
