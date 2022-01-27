@@ -113,7 +113,10 @@ Event type: ${eventType}`);
 
 		// If all PRs are mergable: the push event workflow can be skipped
 		if (allTrue) {
-			// TODO: Print, return, and/or execute workflow skipping
+			return {
+				action: "skip",
+				reason: `All PRs that have base branch ${currentBranch} are mergable. This means there are also pull_request events that will run. Therefore, this workflow, triggered by the push event, can be skipped.`
+			};
 		}
 
 		await delay(1000);
@@ -124,9 +127,9 @@ async function main() {
 	const { action, reason } = await logic();
 	if (action == "continue") {
 		console.log(reason);
-	} else if (action == "abort") {
+	} else if (action == "skip") {
 		console.log(reason);
-		console.log("TODO: Actually abort")
+		console.log("TODO: Actually skip")
 	} else {
 		console.log("Unknown reason: " + reason + ". Letting workflow continue");
 	}
