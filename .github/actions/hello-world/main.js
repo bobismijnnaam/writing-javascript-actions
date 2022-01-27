@@ -1,7 +1,8 @@
 const core = require("@actions/core");
 const github = require('@actions/github');
 
-import { hrtime } from 'process';
+const process = require('process');
+const hrtime = process.hrtime;
 
 /*
 Workflow
