@@ -54,6 +54,12 @@ async function logic() {
 	const currentCommit = process.env.GITHUB_SHA;
 	const eventType = process.env.GITHUB_EVENT_NAME;
 
+	console.log(`Owner: ${owner}
+Repo: ${repo}
+Current branch: ${currentBranch}
+Current commit: ${currentCommit}
+Event type: ${eventType}`);
+
 	/*
 	const { data } = await octokit.rest.pulls.list({
 		owner, repo
