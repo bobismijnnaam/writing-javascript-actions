@@ -45,10 +45,11 @@ async function getHeadOf(octokit, owner, repo, branch) {
 }
 
 async function getPrsOnBranch(octokit, owner, repo, currentBranch) {
-	const { data } = await octokit.rest.pulls.list({
-		owner, repo, base: currentBranch
+	const r = await octokit.rest.pulls.list({
+		owner, repo, head: currentBranch
 	});
-	return data;
+	console.log(r);
+	return r.data;
 }
 
 async function logic(octokit) {
@@ -90,7 +91,11 @@ Event type: ${eventType}`);
 		// If currentCommit is no longer the head of currentBranch: let it run to be safe
 		headOfCurrentBranch = await getHeadOf(octokit, owner, repo, currentBranch);
 		if (headOfCurrentBranch != currentCommit) {
-			return { action: "continue", reason: `Head of current branch: ${headOfCurrentBranch}\nCurrent commit: ${currentCommit}\nThe commit for which this workflow runs is no longer the head of the branch. Therefore we let it run to be sure, because checking for a merge conflict manually is hard.` };
+			return {
+				action: "continue",
+				reason: `Head of current branch: ${headOfCurrentBranch}
+Current commit: ${currentCommit}
+The commit for which this workflow runs is no longer the head of the branch. Therefore we let it run to be sure, because checking for a merge conflict manually is hard.` };
 		}
 
 		prs = await getPrsOnBranch(octokit, owner, repo, currentBranch);
