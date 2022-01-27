@@ -37,24 +37,24 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 async function getHeadOf(octokit, owner, repo, branch) {
 	const { data: { object: { sha }}} = await octokit.rest.git.getRef({
-	// const { object: { sha } } = await octokit.rest.git.getRef({
 		owner,
 		repo,
 		ref: "heads/" + branch,
 	});
-	console.log(obj);
 	return sha;
 }
 
-const main = async () => {
+async function logic() {
 	const myToken = core.getInput('GITHUB_TOKEN');
 
     const octokit = github.getOctokit(myToken)
 
 	const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 	const currentBranch = process.env.GITHUB_REF_NAME;
+	const currentCommit = process.env.GITHUB_SHA;
 	const eventType = process.env.GITHUB_EVENT_NAME;
 
+	/*
 	const { data } = await octokit.rest.pulls.list({
 		owner, repo
 	});
@@ -66,10 +66,10 @@ const main = async () => {
 		});
 		console.log(data);
 	}
+	*/
 
 	if (eventType != "push") {
-		// TODO: Return string or print?
-		return;
+		return { action: "continue", reason: "Workflow event is not a push event but a " + eventType + ", letting workflow continue"};
 	}
 
 	console.log(await getHeadOf(octokit, "utwente-fmt", "vercors", "dev"));
@@ -79,8 +79,7 @@ const main = async () => {
 	do {
 		// If currentCommit is no longer the head of currentBranch: let it run to be safe
 		if (getHeadOf(octokit, owner, repo, currentBranch) != currentCommit) {
-			// TODO: Print, or return reasoning as string?
-			return;
+			return { action: "continue", reason: "The commit for which this workflow runs is no longer the head of the branch. Therefore we let it run to be sure, because checking for a merge conflict manually is hard." };
 		}
 
 		prs = getPrs(octokit, owner, repo, currentBranch);
@@ -104,5 +103,17 @@ const main = async () => {
 		await delay(1000);
 	} while (existstUnsetMergable(prs) && (hrtime.bigint() - start) < secondsToNanos(10));
 };
+
+async function main() {
+	const { action, reason } = await logic();
+	if (action == "continue") {
+		console.log(reason);
+	} else if (action == "abort") {
+		console.log(reason);
+		console.log("TODO: Actually abort")
+	} else {
+		console.log("Unknown reason: " + reason + ". Letting workflow continue");
+	}
+}
 
 main();
