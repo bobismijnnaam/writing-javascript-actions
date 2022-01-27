@@ -94,6 +94,7 @@ Event type: ${eventType}`);
 		}
 
 		prs = await getPrsOnBranch(octokit, owner, repo, currentBranch);
+		console.log(prs);
 
 		if (prs.length == 0) {
 			return {
