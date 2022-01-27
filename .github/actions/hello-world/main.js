@@ -36,7 +36,7 @@ const secondsToNanos = x => x * 1000000000n; // Returns bigint because of "n" at
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 async function getHeadOf(octokit, owner, repo, branch) {
-	const { type: { sha } } = await octokit.rest.git.getRef({
+	const { object: { sha } } = await octokit.rest.git.getRef({
 		owner,
 		repo,
 		ref: "heads/" + branch,
