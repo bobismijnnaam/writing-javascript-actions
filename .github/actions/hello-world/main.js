@@ -162,6 +162,7 @@ async function main() {
 			repo,
 			run_id: workflowRunID
 		}));
+		await delay(10000);
 	} else {
 		console.log("Unknown reason: " + reason + ". Letting workflow continue");
 	}
