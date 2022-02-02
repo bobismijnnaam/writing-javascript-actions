@@ -116,8 +116,10 @@ The commit for which this workflow runs is no longer the head of the branch. The
 
 		// If exists pr from currentBranch s.t. !mergeable(pr): workflow must run
 		let allTrue = true;
+		let prsMergeableUnknown = [];
 		for (const pr of prs) {
 			// Check if equals to false, since allowed values are: true, false, null
+			pr.mergeable = null;
 			if (pr.mergeable == false) {
 				return {
 					action: "continue",
@@ -125,6 +127,9 @@ The commit for which this workflow runs is no longer the head of the branch. The
 				};
 			}
 			allTrue = allTrue && (pr.mergeable == true);
+			if (pr.mergable == null) {
+				prsMergeableUnknown.push(pr);
+			}
 		}
 
 		// If all PRs are mergeable: the push event workflow can be skipped
@@ -134,6 +139,12 @@ The commit for which this workflow runs is no longer the head of the branch. The
 				reason: `All PRs that have base branch ${currentBranch} are mergeable. This means there are also pull_request events that will run. Therefore, this workflow, triggered by the push event, can be skipped.`
 			};
 		}
+
+		console.log("The following PRs are still computing mergeability:");
+		for (const pr of prsMergeableUnknown) {
+			console.log(`- #${pr.id}`);
+		}
+		console.log("Trying again in 1s...");
 
 		await delay(1000);
 
