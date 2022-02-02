@@ -31,7 +31,7 @@ Therefore, we cannot rely on the mergable flag, and let it continue
 
 */
 
-const secondsToNanos = x => x * 1000000000n; // Returns bigint because of "n" at the end
+const secondsToNanos = x => BigInt(x) * 1000000000n; // Returns bigint because of "n" at the end
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
