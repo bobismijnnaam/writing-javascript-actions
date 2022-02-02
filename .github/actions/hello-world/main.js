@@ -48,14 +48,14 @@ async function getPrsOnBranch(octokit, owner, repo, currentBranch) {
 	const { data } = await octokit.rest.pulls.list({
 		owner, repo, head: currentBranch
 	});
-	console.log(r);
+	let prs = [];
 	for (const pr of data) {
-
-	}
 		const { data } = await octokit.rest.pulls.get({
 			owner, repo, pull_number: pr.number
 		});
-	return r.data;
+		prs.push(data);
+	}
+	return prs;
 }
 
 async function logic(octokit) {
