@@ -71,25 +71,9 @@ Current branch: ${currentBranch}
 Current commit: ${currentCommit}
 Event type: ${eventType}`);
 
-	/*
-	const { data } = await octokit.rest.pulls.list({
-		owner, repo
-	});
-
-	console.log(data);
-	for (const pr of data) {
-		const { data } = await octokit.rest.pulls.get({
-			owner, repo, pull_number: pr.number
-		});
-		console.log(data);
-	}
-	*/
-
 	if (eventType != "push") {
 		return { action: "continue", reason: "Workflow event is not a push event but a " + eventType + ", letting workflow continue"};
 	}
-
-	// console.log(await getHeadOf(octokit, "utwente-fmt", "vercors", "dev"));
 
 	let prs = [];
 	const start = hrtime.bigint();
@@ -105,7 +89,6 @@ The commit for which this workflow runs is no longer the head of the branch. The
 		}
 
 		prs = await getPrsOnBranch(octokit, owner, repo, currentBranch);
-		console.log(prs);
 
 		if (prs.length == 0) {
 			return {
