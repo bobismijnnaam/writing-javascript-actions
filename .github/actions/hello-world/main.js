@@ -119,7 +119,6 @@ The commit for which this workflow runs is no longer the head of the branch. The
 		let prsMergeableUnknown = [];
 		for (const pr of prs) {
 			// Check if equals to false, since allowed values are: true, false, null
-			pr.mergeable = null;
 			if (pr.mergeable == false) {
 				return {
 					action: "continue",
