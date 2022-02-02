@@ -13,21 +13,21 @@ if currentEvent != push:
 
 startTime = time()
 
-while ((while loop has not been executed yet || there are PRs with mergable not yet set) && time() - startTime < 10)
+while ((while loop has not been executed yet || there are PRs with mergeable not yet set) && time() - startTime < 10)
 	prs = getPrs()
 	prs = [pr for pr in prs if branch(pr) == currentBranch]
 
-	if exists pr, head(currentBranch) == currentCommit && !mergable(pr)
-		This workflow must run, as there is at least one case where the pull_request event does not run because the commit is not mergable
+	if exists pr, head(currentBranch) == currentCommit && !mergeable(pr)
+		This workflow must run, as there is at least one case where the pull_request event does not run because the commit is not mergeable
 
 	if all pr, branch(pr) == currentBranch ==>
-			head(currentBranch) == currentCommit && mergable(pr)
+			head(currentBranch) == currentCommit && mergeable(pr)
 		This workflow can be safely canceled
 	
 	sleep(1s)
 
-10s has passed and there are still PRs that have mergable unset
-Therefore, we cannot rely on the mergable flag, and let it continue
+10s has passed and there are still PRs that have mergeable unset
+Therefore, we cannot rely on the mergeable flag, and let it continue
 
 */
 
@@ -114,30 +114,30 @@ The commit for which this workflow runs is no longer the head of the branch. The
 			};
 		}
 
-		// If exists pr from currentBranch s.t. !mergable(pr): workflow must run
+		// If exists pr from currentBranch s.t. !mergeable(pr): workflow must run
 		let allTrue = true;
 		for (const pr of prs) {
 			// Check if equals to false, since allowed values are: true, false, null
-			if (pr.mergable == false) {
+			if (pr.mergeable == false) {
 				return {
 					action: "continue",
-					reason: `There is at least one PR that is not mergable: "${pr.title}" (#${pr.id}). Therefore, this workflow needs to run.`
+					reason: `There is at least one PR that is not mergeable: "${pr.title}" (#${pr.id}). Therefore, this workflow needs to run.`
 				};
 			}
-			allTrue = allTrue && (pr.mergable == true);
+			allTrue = allTrue && (pr.mergeable == true);
 		}
 
-		// If all PRs are mergable: the push event workflow can be skipped
+		// If all PRs are mergeable: the push event workflow can be skipped
 		if (allTrue) {
 			return {
 				action: "skip",
-				reason: `All PRs that have base branch ${currentBranch} are mergable. This means there are also pull_request events that will run. Therefore, this workflow, triggered by the push event, can be skipped.`
+				reason: `All PRs that have base branch ${currentBranch} are mergeable. This means there are also pull_request events that will run. Therefore, this workflow, triggered by the push event, can be skipped.`
 			};
 		}
 
 		await delay(1000);
 
-		/* We keep looping while one of the PRs "mergable" flag is unset.
+		/* We keep looping while one of the PRs "mergeable" flag is unset.
 		   Since:
 		   1. If one of them is false, then we return
 		   2. If all of them are true, then we return
@@ -148,7 +148,7 @@ The commit for which this workflow runs is no longer the head of the branch. The
 
 	return {
 		action: "continue",
-		reason: "One of the PRs is taking a long time to set the mergable flag. For safety, this workflow is executed anyway."
+		reason: "One of the PRs is taking a long time to set the mergeable flag. For safety, this workflow is executed anyway."
 	};
 };
 
