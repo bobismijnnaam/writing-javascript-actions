@@ -142,7 +142,7 @@ The commit for which this workflow runs is no longer the head of the branch. The
 
 		console.log("The following PRs are still computing mergeability:");
 		for (const pr of prsMergeableUnknown) {
-			console.log(`- #${pr.id}`);
+			console.log(`- #${pr.number}`);
 		}
 		console.log("Trying again in 1s...");
 
