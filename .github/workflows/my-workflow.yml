@@ -23,4 +23,3 @@ jobs:
     steps:
       - name: "important work"
         run: 'echo "veeeeery important"'
-      - run: 'echo ${{ needs.action.outputs.must_skip }}'

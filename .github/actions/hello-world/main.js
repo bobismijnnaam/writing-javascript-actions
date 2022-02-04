@@ -118,7 +118,7 @@ The commit for which this workflow runs is no longer the head of the branch. The
 		if (allTrue) {
 			return {
 				action: "skip",
-				reason: `All PRs that have base branch ${currentBranch} are mergeable. This means there are also pull_request events that will run. Therefore, this workflow, triggered by the push event, can be skipped.`
+				reason: `All PRs that have base branch "${currentBranch}" are mergeable. This means there are also pull_request events that will run. Therefore, this workflow, triggered by the push event, can be skipped.`
 			};
 		}
 
