@@ -13,9 +13,6 @@ jobs:
           repository: bobismijnnaam/skip-push-on-pr
           ref: main
           path: skip-push-on-pr
-      - run: ls -aR
-      - run: ls ./skip-push-on-pr
-      - run: cat ./skip-push-on-pr/action.yml
       - id: skip-check
         uses: ./skip-push-on-pr
         with:
