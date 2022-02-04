@@ -6,7 +6,7 @@ jobs:
   action:
     runs-on: "ubuntu-latest"
     outputs:
-      should_skip: ${{ steps.skip_check.outputs.must_skip }}
+      must_skip: ${{ steps.skip_check.outputs.must-skip }}
     steps:
       - uses: actions/checkout@v1
       - id: skip_check
@@ -16,7 +16,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   work:
-    if: ${{ needs.action.outputs.should_skip != true }}
+    if: ${{ needs.action.outputs.must_skip != true }}
     runs-on: "ubuntu-latest"
     steps:
       - name: "important work"
