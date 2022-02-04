@@ -9,7 +9,7 @@ jobs:
       must-skip: ${{ steps.skip-check.outputs.must-skip }}
     steps:
       - uses: actions/checkout@v1
-        with: bobismijnnaam/skip-push-on-pr
+        with: "bobismijnnaam/skip-push-on-pr"
       - id: skip-check
         uses: ./skip-push-on-pr/main.js
         with:
