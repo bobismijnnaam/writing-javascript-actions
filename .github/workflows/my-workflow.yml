@@ -3,21 +3,22 @@ name: "JS Actions"
 on: [push, pull_request]
 
 jobs:
-  action:
+  before-work:
     runs-on: "ubuntu-latest"
     outputs:
-      must_skip: ${{ steps.skip_check.outputs.must-skip }}
+      must-skip: ${{ steps.skip-check.outputs.must-skip }}
     steps:
       - uses: actions/checkout@v1
-      - id: skip_check
-        uses: ./.github/actions/hello-world
+        with: bobismijnnaam/skip-push-on-pr
+      - id: skip-check
+        uses: ./skip-push-on-pr/main.js
         with:
           first-greeting: "Learning Lab User"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   work:
-    needs: action
-    if: ${{ needs.action.outputs.must_skip != 'true' }}
+    needs: before-work
+    if: ${{ needs.before-work.outputs.must-skip != 'true' }}
 
     runs-on: "ubuntu-latest"
     steps:
