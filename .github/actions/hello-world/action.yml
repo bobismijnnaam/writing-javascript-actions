@@ -21,6 +21,10 @@ inputs:
     description: "github authentication token secret"
     required: true
 
+outputs:
+  must-skip:
+    description: "Indicates if a skip must happen"
+
 runs:
   using: "node16"
   main: "main.js"

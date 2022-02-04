@@ -152,19 +152,13 @@ async function main() {
 	const { action, reason } = await logic(octokit);
 	if (action == "continue") {
 		console.log(reason);
+        core.setOutput("must-skip", false);
 	} else if (action == "skip") {
 		console.log(reason);
-		const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
-		const workflowRunID = process.env.GITHUB_RUN_ID;
-		console.log(`Skipping workflow #${workflowRunID}`);
-		console.log(await octokit.rest.actions.cancelWorkflowRun({
-			owner,
-			repo,
-			run_id: workflowRunID
-		}));
-		await delay(10000);
+        core.setOutput("must-skip", true);
 	} else {
 		console.log("Unknown reason: " + reason + ". Letting workflow continue");
+        core.setOutput("must-skip", false);
 	}
 }
 
