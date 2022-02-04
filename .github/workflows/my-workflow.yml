@@ -13,9 +13,8 @@ jobs:
           repository: bobismijnnaam/skip-push-on-pr
           ref: main
       - id: skip-check
-        uses: ./skip-push-on-pr/main.js
+        uses: ./skip-push-on-pr
         with:
-          first-greeting: "Learning Lab User"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   work:
