@@ -8,7 +8,7 @@ jobs:
     outputs:
       must-skip: ${{ steps.skip-check.outputs.must-skip }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with: 
           repository: bobismijnnaam/skip-push-on-pr
           ref: main
