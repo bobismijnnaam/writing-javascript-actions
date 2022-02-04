@@ -16,7 +16,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   work:
-    if: ${{ needs.action.outputs.should_skip != 'true' }}
+    if: ${{ needs.action.outputs.should_skip != true }}
     runs-on: "ubuntu-latest"
     steps:
       - name: "important work"
