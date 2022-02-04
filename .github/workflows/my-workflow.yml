@@ -11,6 +11,7 @@ jobs:
       - uses: actions/checkout@v1
         with: 
           repository: bobismijnnaam/skip-push-on-pr
+          ref: main
       - id: skip-check
         uses: ./skip-push-on-pr/main.js
         with:
